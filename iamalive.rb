@@ -26,9 +26,10 @@ DataMapper.auto_upgrade!
 # ROUTES
 
 get '/' do
-    retval = "<ul>\n"
-    Checkin.all.map { |checkin|
-        retval += "<li>#{checkin.computer_name} at #{checkin.timestamp}</li>\n"
+    retval = "<h1>Checkins</h1>\n"
+    retval += "<ul>\n"
+    Checkin.all(:order => [ :timestamp.desc ]).map { |checkin|
+        retval += "<li>#{checkin.computer_name} at #{checkin.timestamp.strftime('%Y-%m-%d at %H:%M:%S')}</li>\n"
     }
     retval += "</ul>\n"
     return retval
