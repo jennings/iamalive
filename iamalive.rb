@@ -14,9 +14,16 @@ DataMapper.setup(:default, ENV['DATABASE_URL'])
 class Checkin
     include DataMapper::Resource
 
-    property :id,               Serial
-    property :computer_name,    String
-    property :timestamp,        DateTime
+    property :id,                   Serial
+    property :organization_name,    String
+    property :computer_name,        String
+    property :timestamp,            DateTime
+
+    def self.purge_outdated
+        # Remove checkins older than 3 days
+        cutoff = Time.now - 3 * (24*60*60)
+        Checkin.all(:timestamp.lt => cutoff).destroy
+    end
 end
 
 DataMapper.finalize
@@ -35,6 +42,11 @@ get '/' do
     return retval
 end
 
+get '/purge' do
+    Checkin.purge_outdated
+    redirect '/'
+end
+
 post '/checkin' do
     computer_name = params["computer_name"]
     timestamp = Time.new
@@ -43,6 +55,8 @@ post '/checkin' do
         :computer_name => computer_name,
         :timestamp => timestamp
     )
+
+    Checkin.purge_outdated
 
     "Checkin for #{computer_name} at #{timestamp} created!"
 end
