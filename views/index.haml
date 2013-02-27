@@ -1,0 +1,9 @@
+!!!
+%html
+  %head
+    %title I Am Alive
+  %body
+    %h1 Check-Ins
+    %ul
+      -checkins.each do |checkin|
+        %li (#{checkin.organization_name}) #{checkin.computer_name} on #{checkin.timestamp}

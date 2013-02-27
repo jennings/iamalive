@@ -18,6 +18,8 @@ GEM
     do_postgres (0.10.12)
       data_objects (= 0.10.12)
     eventmachine (1.0.0)
+    haml (4.0.0)
+      tilt
     rack (1.5.2)
     rack-protection (1.3.2)
       rack
@@ -38,5 +40,6 @@ DEPENDENCIES
   dm-core
   dm-migrations
   dm-postgres-adapter
+  haml
   sinatra
   thin

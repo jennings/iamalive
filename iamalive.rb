@@ -2,6 +2,7 @@
 # Licensed under the Apache License, Version 2.0.
 
 require 'sinatra'
+require 'haml'
 require 'dm-core'
 require 'dm-migrations'
 require 'dm-postgres-adapter'
@@ -33,25 +34,24 @@ DataMapper.auto_upgrade!
 # ROUTES
 
 get '/' do
-    retval = "<h1>Checkins</h1>\n"
-    retval += "<ul>\n"
-    Checkin.all(:order => [ :timestamp.desc ]).map { |checkin|
-        retval += "<li>#{checkin.computer_name} at #{checkin.timestamp.strftime('%Y-%m-%d at %H:%M:%S')}</li>\n"
-    }
-    retval += "</ul>\n"
-    return retval
+    checkins = Checkin.all(:order => [ :timestamp.desc ])
+    haml :index, :locals => { :checkins => checkins }
 end
+
 
 get '/purge' do
     Checkin.purge_outdated
     redirect '/'
 end
 
+
 post '/checkin' do
+    organization_name = params["organization_name"]
     computer_name = params["computer_name"]
     timestamp = Time.new
 
     checkin = Checkin.create(
+        :organization_name => organization_name,
         :computer_name => computer_name,
         :timestamp => timestamp
     )
