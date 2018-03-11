@@ -5,12 +5,11 @@ require 'sinatra'
 require 'haml'
 require 'dm-core'
 require 'dm-migrations'
-require 'dm-postgres-adapter'
 
 
 # MODELS
 
-DataMapper.setup(:default, ENV['DATABASE_URL'])
+DataMapper.setup(:default, settings.database_url)
 
 class Checkin
     include DataMapper::Resource
