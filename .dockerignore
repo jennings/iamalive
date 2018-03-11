@@ -1,0 +1,10 @@
+.env
+log/
+*.db
+
+.bundle/
+.vagrant/
+
+Dockerfile
+Procfile
+Vagrantfile
